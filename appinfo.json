@@ -36,7 +36,6 @@
     "sdkVersion": "3",
     "shortName": "Simple",
     "targetPlatforms": [
-        "aplite",
         "basalt"
     ],
     "uuid": "0f6655ab-bf41-40b0-a437-1f6991822867",

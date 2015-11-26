@@ -12,6 +12,9 @@ static TextLayer *s_weather_layer;
 static TextLayer *s_sun_layer;
 static int s_battery_level;
 static Layer *s_battery_layer;
+static GColor textColour;
+static GColor textBackgroundColour;
+static GColor batteryBarColour;
 
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
   // Store incoming information
@@ -42,7 +45,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
     // Assemble full string and display
     snprintf(weather_layer_buffer, sizeof(weather_layer_buffer), "%s & %s in %s", temperature_buffer, conditions_buffer, location_buffer);
     // Assemble sunset & sunrise string
-    snprintf(sun_layer_buffer, sizeof(sun_layer_buffer), "SR: %s || SS: %s", sunset_buffer, sunrise_buffer);
+    snprintf(sun_layer_buffer, sizeof(sun_layer_buffer), "%s || %s", sunset_buffer, sunrise_buffer);
     
     text_layer_set_text(s_sun_layer, sun_layer_buffer);
     text_layer_set_text(s_weather_layer, weather_layer_buffer);
@@ -96,7 +99,7 @@ static void battery_update_proc(Layer *layer, GContext *ctx) {
   int width = (int)(float)(((float)s_battery_level / 100.0F) * 114.0F);
 
   // Draw the background
-  graphics_context_set_fill_color(ctx, GColorBlack);
+  graphics_context_set_fill_color(ctx, batteryBarColour);
   graphics_fill_rect(ctx, bounds, 0, GCornerNone);
 
   // Draw the bar
@@ -131,8 +134,8 @@ static void main_window_load(Window *window) {
       GRect(0, PBL_IF_ROUND_ELSE(10, 10), bounds.size.w, 50));
 
   // Improve the layout to be more like a watchface
-  text_layer_set_background_color(s_time_layer, GColorWhite);
-  text_layer_set_text_color(s_time_layer, GColorBlack);
+  text_layer_set_background_color(s_time_layer, textBackgroundColour);
+  text_layer_set_text_color(s_time_layer, textColour);
   text_layer_set_text(s_time_layer, "00:00");
   text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
   text_layer_set_font(s_time_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_LIGHT ));
@@ -145,11 +148,11 @@ s_date_layer = text_layer_create(
   GRect(0, PBL_IF_ROUND_ELSE(10, 70), bounds.size.w, 50));
   
   //GColorBlack
-text_layer_set_background_color(s_date_layer, GColorWhite);
-  text_layer_set_text_color(s_date_layer, GColorBlack);
+text_layer_set_background_color(s_date_layer, textBackgroundColour);
+  text_layer_set_text_color(s_date_layer, textColour);
   text_layer_set_text(s_date_layer, "dd:mm:yyyy");
 text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
-  text_layer_set_font(s_date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14));
+  text_layer_set_font(s_date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14_BOLD));
 
 // Add it as a child layer to the Window's root layer
   layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
@@ -159,8 +162,8 @@ text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
       GRect(0, PBL_IF_ROUND_ELSE(125, 130), bounds.size.w, 30));
 
   // Style the text
-  text_layer_set_background_color(s_weather_layer, GColorWhite);
-  text_layer_set_text_color(s_weather_layer, GColorBlack);
+  text_layer_set_background_color(s_weather_layer, textBackgroundColour);
+  text_layer_set_text_color(s_weather_layer, textColour);
   text_layer_set_text_alignment(s_weather_layer, GTextAlignmentCenter);
   text_layer_set_text(s_weather_layer, "hold on boss...");
   text_layer_set_font(s_time_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_LIGHT ));
@@ -170,11 +173,11 @@ text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
   // Sun Layer 
   s_sun_layer = text_layer_create(
       GRect(0, PBL_IF_ROUND_ELSE(95, 95), bounds.size.w, 25));
-  text_layer_set_background_color(s_sun_layer, GColorWhite);
-  text_layer_set_text_color(s_sun_layer, GColorBlack);
+  text_layer_set_background_color(s_sun_layer, textBackgroundColour);
+  text_layer_set_text_color(s_sun_layer, textColour);
   text_layer_set_text_alignment(s_sun_layer, GTextAlignmentCenter);
   text_layer_set_text(s_sun_layer, "<><><><><><>");
-  text_layer_set_font(s_sun_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14 ));
+  text_layer_set_font(s_sun_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14_BOLD));
   
   layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_sun_layer));
   
@@ -209,7 +212,11 @@ static void init() {
   s_main_window = window_create();
 
   // Set the background color
-  window_set_background_color(s_main_window, GColorWhite);
+  window_set_background_color(s_main_window, GColorLightGray);
+  
+  textColour = GColorImperialPurple;
+  textBackgroundColour = GColorLightGray;
+  batteryBarColour = GColorMintGreen;
 
   // Set handlers to manage the elements inside the Window
   window_set_window_handlers(s_main_window, (WindowHandlers) {
