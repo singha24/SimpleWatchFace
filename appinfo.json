@@ -2,6 +2,8 @@
     "appKeys": {
         "KEY_CONDITIONS": 1,
         "KEY_LOCATION": 2,
+        "KEY_SUNRISE": 4,
+        "KEY_SUNSET": 3,
         "KEY_TEMPERATURE": 0
     },
     "capabilities": [
