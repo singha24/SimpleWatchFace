@@ -212,10 +212,10 @@ static void init() {
   s_main_window = window_create();
 
   // Set the background color
-  window_set_background_color(s_main_window, GColorLightGray);
+  window_set_background_color(s_main_window, GColorBlack);
   
-  textColour = GColorImperialPurple;
-  textBackgroundColour = GColorLightGray;
+  textColour = GColorWhite;
+  textBackgroundColour = GColorBlack;
   batteryBarColour = GColorMintGreen;
 
   // Set handlers to manage the elements inside the Window

@@ -10,6 +10,7 @@
         "location"
     ],
     "companyName": "Pebble",
+    "enableMultiJS": false,
     "longName": "Simple",
     "projectType": "native",
     "resources": {
@@ -17,7 +18,7 @@
             {
                 "file": "images/background.png",
                 "name": "IMAGE_BACKGROUND",
-                "type": "png"
+                "type": "bitmap"
             },
             {
                 "compatibility": "2.7",
